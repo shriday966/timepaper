@@ -4,61 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Timepaper - Your Day in History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Georgia', serif;
-      background-color: #f5e9c7;
-      color: #2c1e0b;
+      font-family: 'Spectral', serif;
+      background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+      background-color: #f8f3e6;
+      color: #2c1d0c;
       margin: 0;
       padding: 0;
+      line-height: 1.8;
     }
 
     .paper-container {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1100px;
       margin: auto;
-      padding: 3rem 1.5rem;
-      background-color: #fdf3d4;
-      border-left: 6px double #a67c52;
-      border-right: 6px double #a67c52;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
+      padding: 2rem 1.5rem;
+      background: rgba(253, 250, 240, 0.96);
+      border: 12px solid transparent;
+      border-image: url('https://i.imgur.com/YKdgcP7.png') 30 round;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.15);
     }
 
     h1 {
-      font-size: 4rem;
-      font-weight: bold;
+      font-size: 3.2rem;
       text-align: center;
       margin-bottom: 0.5rem;
       color: #3b2a1a;
-      text-transform: uppercase;
-      text-shadow: 1px 1px 0px #dccbb3;
     }
 
     h2 {
       font-size: 2rem;
       margin-top: 2rem;
       margin-bottom: 1rem;
-      border-bottom: 2px dotted #a67c52;
-      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #927c5d;
+      padding-bottom: 0.3rem;
     }
 
     h3 {
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       font-weight: bold;
-      margin: 0.75rem 0 0.25rem;
-      color: #402810;
+      margin: 1rem 0 0.4rem;
+      color: #422b18;
     }
 
     .event {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
       padding-bottom: 1rem;
-      border-bottom: 1px dashed #aa8e6d;
+      border-bottom: 1px dashed #c7b08d;
+    }
+
+    .event p::first-letter {
+      float: left;
+      font-size: 2rem;
+      line-height: 1;
+      padding-right: 0.3rem;
+      color: #5a3e1b;
+      font-weight: bold;
     }
 
     .subhead {
       font-style: italic;
       text-align: center;
-      color: #6e543a;
+      color: #6e5840;
       margin-bottom: 2rem;
     }
 
@@ -68,46 +77,56 @@
     }
 
     button {
-      background-color: #5c3b1a;
-      color: #fdf3d4;
-      padding: 0.5rem 1rem;
+      background-color: #4b311a;
+      color: #fff7e6;
+      padding: 0.5rem 1.2rem;
       border: none;
       border-radius: 4px;
       font-size: 1rem;
       cursor: pointer;
       margin-left: 0.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      font-family: 'Spectral', serif;
     }
 
     button:hover {
-      background-color: #3e2912;
+      background-color: #322110;
     }
 
     input[type="date"] {
       padding: 0.5rem;
-      border: 1px solid #a67c52;
+      border: 1px solid #99876d;
       border-radius: 4px;
       font-size: 1rem;
-      background-color: #fef8e0;
+      background-color: #fffdf6;
       color: #3b2a1a;
+      font-family: 'Spectral', serif;
     }
 
     .fake-ad {
       border: 1px dashed #a67c52;
-      background-color: #f9e7be;
+      background-color: #f7e4c3;
       padding: 1rem;
       margin: 2rem 0;
       font-family: 'Courier New', Courier, monospace;
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #4a3215;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.08);
+    }
+
+    .fake-ad img {
+      width: 100%;
+      max-width: 300px;
+      margin: 0.5rem auto;
+      display: block;
+      border: 1px solid #b89b78;
     }
 
     @media (max-width: 768px) {
-      h1 { font-size: 2.5rem; }
+      h1 { font-size: 2.2rem; }
       h2 { font-size: 1.5rem; }
-      .paper-container { padding: 1.5rem 1rem; }
+      h3 { font-size: 1.1rem; }
+      .paper-container { padding: 1rem; }
     }
   </style>
 </head>
@@ -118,13 +137,14 @@
 
     <div class="controls">
       <input type="date" id="dateInput" />
-      <button onclick="showEvents()">Show Front Page</button>
+      <button onclick="showEvents()">Show Headlines</button>
     </div>
 
     <div class="fake-ad">
+      <img src="https://i.imgur.com/MC7bvXy.jpg" alt="Vintage Suit Ad">
       <strong>🧥 INVINCIBLE SUITS!</strong><br>
-      For well-dressed gentlemen of taste. Now available in wool-zealon blend. <br>
-      "My Word—HOW SMART YOU ARE!"
+      For the bold, the brilliant, and the best-dressed gentlemen in town. Only 5.99 with this coupon!<br>
+      “Step into the future of fashion with yesterday’s charm.”
     </div>
 
     <div id="output">
@@ -132,14 +152,17 @@
     </div>
 
     <div class="fake-ad">
-      <strong>🛠️ Be Your Own Handy-Man!</strong><br>
-      Build it yourself with <em>PINEX Panels</em><br>
-      Stronger. Cheaper. Yours forever.
+      <img src="https://i.imgur.com/dyTHdHq.jpg" alt="Pinex Panels">
+      <strong>🛠️ BUILD YOUR FUTURE!</strong><br>
+      PINEX Panels for every handyman’s dream project. Lightweight. Durable. Legendary.<br>
+      “Even your neighbor will ask who built it.”
     </div>
 
     <div class="fake-ad">
-      <strong>☕ ROMA TEA: The Taste of Delicious Aroma</strong><br>
-      Free picture cards of the Queen with every pack!
+      <img src="https://i.imgur.com/WkYB2S5.jpg" alt="Roma Tea">
+      <strong>☕ ROMA TEA – The Queen’s Choice</strong><br>
+      Rich in aroma, steeped in legacy. Comes with collectible royal cards in every box.<br>
+      “Brew brilliance. Brew ROMA.”
     </div>
   </div>
 
@@ -153,6 +176,7 @@
       }
 
       const date = new Date(dateInput);
+      const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
 
@@ -161,10 +185,12 @@
       try {
         const res = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
         const data = await res.json();
-        const events = data.events.slice(0, 10);
+        const filteredEvents = data.events
+          .filter(event => event.year <= year)
+          .slice(0, 10);
 
         output.innerHTML = `<h2>🗓 Headlines from ${date.toDateString()}</h2>`;
-        events.forEach(event => {
+        filteredEvents.forEach(event => {
           const item = `
             <div class='event'>
               <h3>${event.year}</h3>
