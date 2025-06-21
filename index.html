@@ -21,43 +21,53 @@
   <script>
     async function generateNews() {
       const output = document.getElementById("output");
-      const date = new Date(document.getElementById("dateInput").value);
+      const dateInput = document.getElementById("dateInput").value;
+      if (!dateInput) {
+        alert("Please select a date first.");
+        return;
+      }
+
+      const date = new Date(dateInput);
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
 
-      output.innerHTML = "<p class='italic'>Fetching events...</p>";
+      output.innerHTML = "<p class='italic text-gray-600'>Fetching events...</p>";
 
-      // 1. Fetch historical events from Wikipedia
-      const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
-      const wikiData = await wikiRes.json();
-      const events = wikiData.events.slice(0, 3); // Use top 3 events only for MVP
+      try {
+        // 1. Fetch historical events from Wikipedia
+        const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
+        const wikiData = await wikiRes.json();
+        const events = wikiData.events.slice(0, 3); // Use top 3 events only for MVP
 
-      // 2. Call AI API to expand each event
-      const expandedArticles = await Promise.all(events.map(async (event) => {
-        const prompt = `Write a newspaper article for the following historical event as if it were written on that day: \"${event.text}\"`;
-        const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer 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"
-          },
-          body: JSON.stringify({
-            model: "mistral/mistral-7b-instruct",
-            messages: [
-              { role: "system", content: "You are a vintage newspaper writer." },
-              { role: "user", content: prompt }
-            ]
-          })
-        });
-        const aiJson = await aiRes.json();
-        return `<div class='mb-6'><h2 class='text-xl font-bold mb-2'>${event.year}</h2><p>${aiJson.choices[0].message.content}</p></div>`;
-      }));
+        // 2. Call AI API to expand each event
+        const expandedArticles = await Promise.all(events.map(async (event) => {
+          const prompt = `Write a newspaper article for the following historical event as if it were written on that day: \"${event.text}\"`;
+          const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer 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"
+            },
+            body: JSON.stringify({
+              model: "mistral/mistral-7b-instruct",
+              messages: [
+                { role: "system", content: "You are a vintage newspaper writer." },
+                { role: "user", content: prompt }
+              ]
+            })
+          });
+          const aiJson = await aiRes.json();
+          return `<div class='mb-6'><h2 class='text-xl font-bold mb-2'>${event.year}</h2><p>${aiJson.choices[0].message.content}</p></div>`;
+        }));
 
-      // 3. Display the AI-generated news
-      output.innerHTML = `
-        <h2 class='text-2xl font-semibold mb-4'>📰 Front Page - ${date.toDateString()}</h2>
-        ${expandedArticles.join('')}
-      `;
+        // 3. Display the AI-generated news
+        output.innerHTML = `
+          <h2 class='text-2xl font-semibold mb-4'>📰 Front Page - ${date.toDateString()}</h2>
+          ${expandedArticles.join('')}
+        `;
+      } catch (error) {
+        output.innerHTML = "<p class='text-red-600'>⚠️ Failed to fetch news. Please try another date or check your internet/API key.</p>";
+      }
     }
   </script>
 </body>
