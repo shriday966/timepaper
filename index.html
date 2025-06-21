@@ -4,22 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Timepaper - Your Day in History</title>
-  <script defer src="script.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Merriweather', serif;
+    }
+    .paper-bg {
+      background: #fdf6e3;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-serif p-4">
-  <div class="max-w-3xl mx-auto">
-    <h1 class="text-4xl font-bold text-center mb-6">🗞️ Timepaper</h1>
-    <p class="text-center mb-4">Pick a date to relive the news of the past, powered by AI.</p>
+<body class="paper-bg font-serif p-6 text-gray-800">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-5xl font-bold text-center mb-6">📰 Timepaper</h1>
+    <p class="text-center mb-6 italic">Travel back in time and read what happened on this day in history.</p>
 
-    <input type="date" id="dateInput" class="p-2 border border-gray-300 rounded mb-4 block mx-auto" />
-    <button onclick="generateNews()" class="block mx-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Get the News</button>
+    <div class="text-center mb-6">
+      <input type="date" id="dateInput" class="p-2 border border-gray-400 rounded" />
+      <button onclick="showEvents()" class="ml-2 bg-gray-800 text-white px-4 py-2 rounded hover:bg-black">See News</button>
+    </div>
 
-    <div id="output" class="mt-8 bg-white p-6 rounded shadow"></div>
+    <div id="output" class="bg-white p-6 rounded shadow-md border border-gray-300">
+      <p class="text-center italic text-gray-500">Pick a date to begin reading the headlines of the past.</p>
+    </div>
   </div>
 
   <script>
-    async function generateNews() {
+    async function showEvents() {
       const output = document.getElementById("output");
       const dateInput = document.getElementById("dateInput").value;
       if (!dateInput) {
@@ -31,42 +42,25 @@
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
 
-      output.innerHTML = "<p class='italic text-gray-600'>Fetching events...</p>";
+      output.innerHTML = "<p class='italic text-gray-600'>Loading headlines...</p>";
 
       try {
-        // 1. Fetch historical events from Wikipedia
-        const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
-        const wikiData = await wikiRes.json();
-        const events = wikiData.events.slice(0, 3); // Use top 3 events only for MVP
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
+        const data = await res.json();
+        const events = data.events.slice(0, 10);
 
-        // 2. Call AI API to expand each event
-        const expandedArticles = await Promise.all(events.map(async (event) => {
-          const prompt = `Write a newspaper article for the following historical event as if it were written on that day: \"${event.text}\"`;
-          const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer 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"
-            },
-            body: JSON.stringify({
-              model: "mistral/mistral-7b-instruct",
-              messages: [
-                { role: "system", content: "You are a vintage newspaper writer." },
-                { role: "user", content: prompt }
-              ]
-            })
-          });
-          const aiJson = await aiRes.json();
-          return `<div class='mb-6'><h2 class='text-xl font-bold mb-2'>${event.year}</h2><p>${aiJson.choices[0].message.content}</p></div>`;
-        }));
-
-        // 3. Display the AI-generated news
-        output.innerHTML = `
-          <h2 class='text-2xl font-semibold mb-4'>📰 Front Page - ${date.toDateString()}</h2>
-          ${expandedArticles.join('')}
-        `;
+        output.innerHTML = `<h2 class='text-2xl font-bold mb-4'>🗓 Headlines from ${date.toDateString()}</h2>`;
+        events.forEach(event => {
+          const item = `
+            <div class='mb-4'>
+              <h3 class='text-lg font-semibold mb-1'>${event.year}</h3>
+              <p class='text-justify'>${event.text}</p>
+            </div>
+          `;
+          output.innerHTML += item;
+        });
       } catch (error) {
-        output.innerHTML = "<p class='text-red-600'>⚠️ Failed to fetch news. Please try another date or check your internet/API key.</p>";
+        output.innerHTML = "<p class='text-red-600'>⚠️ Could not fetch news. Try again later.</p>";
       }
     }
   </script>
