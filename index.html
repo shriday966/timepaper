@@ -7,52 +7,58 @@
   <style>
     body {
       font-family: 'Georgia', serif;
-      background-color: #fffaf0;
-      color: #333;
-      line-height: 1.7;
+      background-color: #f5e9c7;
+      color: #2c1e0b;
       margin: 0;
       padding: 0;
     }
 
     .paper-container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
-      background-color: white;
-      border: 1px solid #ddd;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 3rem 1.5rem;
+      background-color: #fdf3d4;
+      border-left: 6px double #a67c52;
+      border-right: 6px double #a67c52;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.15);
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 4rem;
       font-weight: bold;
       text-align: center;
       margin-bottom: 0.5rem;
+      color: #3b2a1a;
+      text-transform: uppercase;
+      text-shadow: 1px 1px 0px #dccbb3;
     }
 
     h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
+      font-size: 2rem;
+      margin-top: 2rem;
       margin-bottom: 1rem;
+      border-bottom: 2px dotted #a67c52;
+      padding-bottom: 0.5rem;
     }
 
     h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #222;
-      margin-bottom: 0.25rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 0.75rem 0 0.25rem;
+      color: #402810;
     }
 
     .event {
-      border-top: 1px solid #eee;
-      padding-top: 1rem;
-      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed #aa8e6d;
     }
 
     .subhead {
       font-style: italic;
       text-align: center;
-      color: #666;
+      color: #6e543a;
       margin-bottom: 2rem;
     }
 
@@ -62,37 +68,78 @@
     }
 
     button {
-      background-color: #1a202c;
-      color: white;
+      background-color: #5c3b1a;
+      color: #fdf3d4;
       padding: 0.5rem 1rem;
       border: none;
-      border-radius: 6px;
+      border-radius: 4px;
+      font-size: 1rem;
       cursor: pointer;
+      margin-left: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     button:hover {
-      background-color: #000;
+      background-color: #3e2912;
     }
 
     input[type="date"] {
       padding: 0.5rem;
-      border: 1px solid #bbb;
+      border: 1px solid #a67c52;
       border-radius: 4px;
+      font-size: 1rem;
+      background-color: #fef8e0;
+      color: #3b2a1a;
+    }
+
+    .fake-ad {
+      border: 1px dashed #a67c52;
+      background-color: #f9e7be;
+      padding: 1rem;
+      margin: 2rem 0;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      font-size: 1rem;
+      color: #4a3215;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.5rem; }
+      .paper-container { padding: 1.5rem 1rem; }
     }
   </style>
 </head>
 <body>
   <div class="paper-container">
-    <h1>📰 Timepaper</h1>
-    <p class="subhead">Travel back in time and read what happened on this day in history.</p>
+    <h1>The Timepaper</h1>
+    <p class="subhead">Relive the past — read the historic headlines as they appeared back in time.</p>
 
     <div class="controls">
       <input type="date" id="dateInput" />
-      <button onclick="showEvents()">See News</button>
+      <button onclick="showEvents()">Show Front Page</button>
+    </div>
+
+    <div class="fake-ad">
+      <strong>🧥 INVINCIBLE SUITS!</strong><br>
+      For well-dressed gentlemen of taste. Now available in wool-zealon blend. <br>
+      "My Word—HOW SMART YOU ARE!"
     </div>
 
     <div id="output">
-      <p class="subhead">Pick a date to begin reading the headlines of the past.</p>
+      <p class="subhead">Choose a date to see what the world was reading that day...</p>
+    </div>
+
+    <div class="fake-ad">
+      <strong>🛠️ Be Your Own Handy-Man!</strong><br>
+      Build it yourself with <em>PINEX Panels</em><br>
+      Stronger. Cheaper. Yours forever.
+    </div>
+
+    <div class="fake-ad">
+      <strong>☕ ROMA TEA: The Taste of Delicious Aroma</strong><br>
+      Free picture cards of the Queen with every pack!
     </div>
   </div>
 
@@ -109,7 +156,7 @@
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
 
-      output.innerHTML = "<p class='subhead'>Loading headlines...</p>";
+      output.innerHTML = "<p class='subhead'>Loading today's historic headlines...</p>";
 
       try {
         const res = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
@@ -127,7 +174,7 @@
           output.innerHTML += item;
         });
       } catch (error) {
-        output.innerHTML = "<p class='text-red-600'>⚠️ Could not fetch news. Try again later.</p>";
+        output.innerHTML = "<p class='subhead'>⚠️ Could not fetch headlines. Try again later.</p>";
       }
     }
   </script>
