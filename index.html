@@ -8,12 +8,12 @@
   <style>
     body {
       font-family: 'Spectral', serif;
-      background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
-      background-color: #f8f3e6;
-      color: #2c1d0c;
+      background: #f3ecd9;
+      color: #2e2a1f;
       margin: 0;
       padding: 0;
       line-height: 1.8;
+      filter: grayscale(100%) contrast(0.85);
     }
 
     .paper-container {
@@ -21,24 +21,23 @@
       max-width: 1100px;
       margin: auto;
       padding: 2rem 1.5rem;
-      background: rgba(253, 250, 240, 0.96);
-      border: 12px solid transparent;
-      border-image: url('https://i.imgur.com/YKdgcP7.png') 30 round;
-      box-shadow: inset 0 0 50px rgba(0,0,0,0.15);
+      background: #f3ecd9;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.05);
     }
 
     h1 {
-      font-size: 3.2rem;
+      font-size: 3rem;
       text-align: center;
       margin-bottom: 0.5rem;
-      color: #3b2a1a;
+      color: #2e2a1f;
+      text-shadow: 1px 1px 0 #d1c4a2;
     }
 
     h2 {
       font-size: 2rem;
       margin-top: 2rem;
       margin-bottom: 1rem;
-      border-bottom: 1px solid #927c5d;
+      border-bottom: 1px solid #bbb296;
       padding-bottom: 0.3rem;
     }
 
@@ -46,7 +45,7 @@
       font-size: 1.25rem;
       font-weight: bold;
       margin: 1rem 0 0.4rem;
-      color: #422b18;
+      color: #3a362c;
     }
 
     .event {
@@ -60,14 +59,14 @@
       font-size: 2rem;
       line-height: 1;
       padding-right: 0.3rem;
-      color: #5a3e1b;
+      color: #4e4639;
       font-weight: bold;
     }
 
     .subhead {
       font-style: italic;
       text-align: center;
-      color: #6e5840;
+      color: #6f6453;
       margin-bottom: 2rem;
     }
 
@@ -77,8 +76,8 @@
     }
 
     button {
-      background-color: #4b311a;
-      color: #fff7e6;
+      background-color: #4b3e2e;
+      color: #f3ecd9;
       padding: 0.5rem 1.2rem;
       border: none;
       border-radius: 4px;
@@ -89,7 +88,7 @@
     }
 
     button:hover {
-      background-color: #322110;
+      background-color: #322b21;
     }
 
     input[type="date"] {
@@ -97,29 +96,9 @@
       border: 1px solid #99876d;
       border-radius: 4px;
       font-size: 1rem;
-      background-color: #fffdf6;
+      background-color: #fdfaf2;
       color: #3b2a1a;
       font-family: 'Spectral', serif;
-    }
-
-    .fake-ad {
-      border: 1px dashed #a67c52;
-      background-color: #f7e4c3;
-      padding: 1rem;
-      margin: 2rem 0;
-      font-family: 'Courier New', Courier, monospace;
-      text-align: center;
-      font-size: 0.95rem;
-      color: #4a3215;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.08);
-    }
-
-    .fake-ad img {
-      width: 100%;
-      max-width: 300px;
-      margin: 0.5rem auto;
-      display: block;
-      border: 1px solid #b89b78;
     }
 
     @media (max-width: 768px) {
@@ -140,14 +119,9 @@
       <button onclick="showEvents()">Show Headlines</button>
     </div>
 
-    
-
     <div id="output">
       <p class="subhead">Choose a date to see what the world was reading that day...</p>
     </div>
-
-    
-    
   </div>
 
   <script>
